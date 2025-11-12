@@ -1,0 +1,52 @@
+From e3690c05200b5ea0f966f6609c2dbe5103a70028 Mon Sep 17 00:00:00 2001
+From: lhdjply <lhdjply@126.com>
+Date: Wed, 12 Nov 2025 14:29:42 +0800
+Subject: [PATCH] fix build error
+
+Signed-off-by: lhdjply <lhdjply@126.com>
+---
+ 3rdparty/terminalwidget/CMakeLists.txt | 2 ++
+ CMakeLists.txt                         | 7 ++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/3rdparty/terminalwidget/CMakeLists.txt b/3rdparty/terminalwidget/CMakeLists.txt
+index c631867..356523d 100644
+--- a/3rdparty/terminalwidget/CMakeLists.txt
++++ b/3rdparty/terminalwidget/CMakeLists.txt
+@@ -233,6 +233,8 @@ endif()
+ set_target_properties( ${TERMINALWIDGET_LIBRARY_NAME} PROPERTIES
+                        SOVERSION ${TERMINALWIDGET_VERSION_MAJOR}
+                        VERSION ${TERMINALWIDGET_VERSION}
++                       CXX_VISIBILITY_PRESET default
++                       VISIBILITY_INLINES_HIDDEN ON
+                      )
+ 
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 856dea8..0a813a2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -94,6 +94,9 @@ set(TERMINALWIDGET_VERSION_MAJOR "0")
+ set(TERMINALWIDGET_VERSION_MINOR "14")
+ set(TERMINALWIDGET_VERSION_PATCH "1")
+ 
++# Set the terminalwidget library name to match what's built in the subdirectory
++set(TERMINALWIDGET_LIBRARY_NAME terminalwidget${QT_DESIRED_VERSION})
++
+ add_subdirectory(3rdparty/terminalwidget)
+ 
+ include_directories(${DtkWidget_INCLUDE_DIRS})
+@@ -262,7 +265,9 @@ target_include_directories(${EXE_NAME}
+     ${XCB_EWMH_INCLUDE_DIRS}
+ )
+ 
+-target_link_libraries (deepin-terminal ${LINK_LIBS} terminalwidget${QT_DESIRED_VERSION})
++# Ensure terminalwidget is built before linking
++add_dependencies(deepin-terminal ${TERMINALWIDGET_LIBRARY_NAME})
++target_link_libraries (deepin-terminal ${LINK_LIBS} ${TERMINALWIDGET_LIBRARY_NAME})
+ 
+ # Install settings
+ 
+-- 
+2.50.1
+

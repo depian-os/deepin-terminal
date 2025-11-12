@@ -1,3 +1,9 @@
+deepin-terminal (6.5.18-0depian1) unstable; urgency=medium
+
+  * 修复编译错误
+
+ -- lhdjply <lhdjply@126.com>  Fri, 10 Oct 2025 13:07:55 +0800
+
 deepin-terminal (6.5.18) unstable; urgency=medium
 
   * fix: Thunder God Window Display Abnormal
